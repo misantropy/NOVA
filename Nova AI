@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#101522">
+    <link rel="manifest" href="manifest.json">
+
+    <title>NOVA AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #101522;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 20px;
+            background: #192235;
+            border-bottom: 1px solid #29364c;
+        }
+
+        header h2 {
+            margin: 0;
+            color: #62d9ff;
+        }
+
+        header p {
+            margin-bottom: 0;
+            color: #9caac0;
+            font-size: 13px;
+        }
+
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .message {
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 15px;
+            max-width: 85%;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .user {
+            background: #245b88;
+            margin-left: auto;
+        }
+
+        .ai {
+            background: #263247;
+            margin-right: auto;
+        }
+
+        footer {
+            display: flex;
+            padding: 12px;
+            gap: 8px;
+            background: #192235;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 13px;
+            border-radius: 12px;
+            border: 1px solid #34445e;
+            background: #101522;
+            color: white;
+            font-size: 15px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 17px;
+            background: #29b9ed;
+            color: #07121d;
+            font-weight: bold;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>✦ NOVA AI</h2>
+    <p>Твой интеллектуальный помощник</p>
+</header>
+
+<div id="chat">
+    <div class="message ai">
+        Привет! Я NOVA. Чем могу помочь?
+    </div>
+</div>
+
+<footer>
+    <input
+        id="userInput"
+        type="text"
+        placeholder="Напиши сообщение..."
+    >
+
+    <button onclick="sendMessage()">➤</button>
+</footer>
+
+<script>
+    function sendMessage() {
+
+        const input = document.getElementById("userInput");
+        const chat = document.getElementById("chat");
+
+        const text = input.value.trim();
+
+        if (text === "") {
+            return;
+        }
+
+        // Добавляем сообщение пользователя
+        const userMessage = document.createElement("div");
+
+        userMessage.className = "message user";
+        userMessage.textContent = text;
+
+        chat.appendChild(userMessage);
+
+        input.value = "";
+
+        // Создаём ответ помощника
+        setTimeout(function() {
+
+            const aiMessage = document.createElement("div");
+
+            aiMessage.className = "message ai";
+
+            aiMessage.textContent =
+                "Я получил твоё сообщение: " + text;
+
+            chat.appendChild(aiMessage);
+
+            chat.scrollTop = chat.scrollHeight;
+
+        }, 700);
+
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Отправка сообщения клавишей Enter
+    document.getElementById("userInput")
+        .addEventListener("keydown", function(event) {
+
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+
+        });
+
+    // Регистрация PWA
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function() {
+            navigator.serviceWorker.register("./sw.js");
+        });
+    }
+</script>
+
+</body>
+</html>
